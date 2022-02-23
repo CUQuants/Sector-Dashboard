@@ -257,7 +257,9 @@ def portfolio_cum_graph(portfolio_return, market_prices):
     df = df.cumsum().dropna().reset_index()
    
     df.columns = ["date", "S&P", "Benchmark", "Cumulative Return"]
-    df.columns[1:] = df.columns[1:] * 100 * 100
+    df["S&P"] = df["S&P"] * 100
+    df["Benchmark"] = df["Benchmark"] * 100
+    df["Cumulative Return"] = df["Cumulative Return"] * 100
     
     fig = px.line(df, x="date", y= df.columns[1:], title='Portfolio Return', width = 1000)
     st.plotly_chart(fig)
