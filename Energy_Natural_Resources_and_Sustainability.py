@@ -51,6 +51,8 @@ def get_portfolio_value():
         current_portfolio_value_color = "red"
     else:
         current_portfolio_value_color = "green"
+        
+    current_portfolio_value = "{:,}".format(current_portfolio_value)
    
     st.markdown("<h3 style='text-align: center; color: {};'>Portfolio Value: ${}</h3>".format(current_portfolio_value_color, current_portfolio_value), unsafe_allow_html=True)
 
