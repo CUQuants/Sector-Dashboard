@@ -163,7 +163,7 @@ def spx_tracking_error(market_prices, portfolio_return):
     diff = (portfolio_returns - market_returns).dropna()
    
     tracking_error = round(statistics.stdev(diff),2)
-    st.markdown("<h3 style='text-align: center; color: white;'>S&P Tracking Err. (YTD): {}</h3>".format(tracking_error), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: grey;'>S&P Tracking Err. (YTD): {}</h3>".format(tracking_error), unsafe_allow_html=True)
    
 def benchmark_tracking_error(market_prices, portfolio_return):
 
@@ -172,7 +172,7 @@ def benchmark_tracking_error(market_prices, portfolio_return):
     diff = (portfolio_returns - market_returns).dropna()
    
     tracking_error = round(statistics.stdev(diff),2)
-    st.markdown("<h3 style='text-align: center; color: white;'>Benchmark Tracking Err. (YTD): {}</h3>".format(tracking_error), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: grey;'>Benchmark Tracking Err. (YTD): {}</h3>".format(tracking_error), unsafe_allow_html=True)
 
 def daily_return_or_sharpe(market_prices, portfolio_return):
 
@@ -204,7 +204,7 @@ def sp_correlation(market_prices, portfolio_return):
    
     df = pd.DataFrame({"portfolio": portfolio_return, "market": market_return}).dropna()
     corr = round(df.corr()[df.columns[1]][0], 2)
-    st.markdown("<h3 style='text-align: center; color: white;'>S&P Correlation: {}</h3>".format(corr), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: grey;'>S&P Correlation: {}</h3>".format(corr), unsafe_allow_html=True)
    
 def benchmark_correlation(market_prices, portfolio_return):
    
@@ -213,7 +213,7 @@ def benchmark_correlation(market_prices, portfolio_return):
    
     df = pd.DataFrame({"portfolio": portfolio_return, "market": market_return}).dropna()
     corr = round(df.corr()[df.columns[1]][0], 2)
-    st.markdown("<h3 style='text-align: center; color: white;'>Benchmark Correlation: {}</h3>".format(corr), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: grey;'>Benchmark Correlation: {}</h3>".format(corr), unsafe_allow_html=True)
    
 def get_brent(market_prices):
    
@@ -284,14 +284,14 @@ while True:
    
     with top_row1:
    
-        st.markdown("<h2 style='text-align: center; color: white;'>Portfolio Statistics</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'>Portfolio Statistics</h2>", unsafe_allow_html=True)
         get_portfolio_value()
         daily_port_return(portfolio_return)
         ytd_port(portfolio_return)
        
     with top_row2:
        
-        st.markdown("<h2 style='text-align: center; color: white;'>Market Statistics</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'>Market Statistics</h2>", unsafe_allow_html=True)
         get_spx_daily_return(market_prices)
         spx_ytd_return(market_prices)
         get_benchmark_daily_return(market_prices)
@@ -299,7 +299,7 @@ while True:
      
     with top_row3:
        
-        st.markdown("<h2 style='text-align: center; color: white;'>Relative Statistics</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'>Relative Statistics</h2>", unsafe_allow_html=True)
         spx_relative_per(market_prices, portfolio_return)
         benchmark_relative_per(market_prices, portfolio_return)
         spx_tracking_error(market_prices, portfolio_return)
@@ -309,20 +309,20 @@ while True:
    
     with second_row1:
        
-        st.markdown("<h2 style='text-align: center; color: white;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: white;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: white;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: white;'>Market Info</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'>Market Info</h2>", unsafe_allow_html=True)
         sp_correlation(market_prices, portfolio_return)
         benchmark_correlation(market_prices, portfolio_return)
        
     with second_row2:
        
-        st.markdown("<h2 style='text-align: center; color: white;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: white;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: white;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: white;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: white;'>Market Prices</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'>Market Prices</h2>", unsafe_allow_html=True)
         get_brent(market_prices)
         get_crude(market_prices)
    
