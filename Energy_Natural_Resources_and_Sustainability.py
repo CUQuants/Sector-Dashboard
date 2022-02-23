@@ -224,7 +224,7 @@ def get_brent(market_prices):
     else:
         color = "red"
        
-    st.markdown("<h3 style='text-align: center; color: {};'>Brent Price: {}</h3>".format(color, current_price), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: {};'>Brent Price: ${}</h3>".format(color, current_price), unsafe_allow_html=True)
 
 def get_crude(market_prices):
    
@@ -235,7 +235,7 @@ def get_crude(market_prices):
     else:
         color = "red"
        
-    st.markdown("<h3 style='text-align: center; color: {};'>Crude Price: {}</h3>".format(color, current_price), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: ${};'>Crude Price: {}</h3>".format(color, current_price), unsafe_allow_html=True)
    
 def make_pie_chart(portfolio_value):
    
@@ -322,7 +322,7 @@ while True:
         st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
         st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
         st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; color: grey;'>Market Prices</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: grey;'>Sector Securities</h2>", unsafe_allow_html=True)
         get_brent(market_prices)
         get_crude(market_prices)
    
