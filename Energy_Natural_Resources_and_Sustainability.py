@@ -224,6 +224,7 @@ def get_brent(market_prices):
     else:
         color = "red"
        
+
     st.markdown("<h3 style='text-align: center; color: {};'>Brent Price: ${}</h3>".format(color, current_price), unsafe_allow_html=True)
 
 def get_crude(market_prices):
