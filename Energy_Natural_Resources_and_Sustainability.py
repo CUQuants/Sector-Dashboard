@@ -135,7 +135,7 @@ def benchmark_relative_per(market_prices, portfolio_return):
     benchmark_return = round(market_prices["XLE"].pct_change().dropna().cumsum()[len(market_prices) - 2] * 100,2)
     ytd_return = round(portfolio_return[portfolio_return.columns[len(portfolio_return.columns) - 1]].cumsum()[len(portfolio_return) - 1] * 100,2)
    
-    relative_performance = ytd_return - benchmark_return
+    relative_performance = round(ytd_return - benchmark_return, 2)
    
     if relative_performance > 0:
         color = "green"
@@ -149,7 +149,7 @@ def spx_relative_per(market_prices, portfolio_return):
     benchmark_return = round(market_prices["^GSPC"].pct_change().dropna().cumsum()[len(market_prices) - 2] * 100,2)
     ytd_return = round(portfolio_return[portfolio_return.columns[len(portfolio_return.columns) - 1]].cumsum()[len(portfolio_return) - 1] * 100,2)
    
-    relative_performance = ytd_return - benchmark_return
+    relative_performance = round(ytd_return - benchmark_return, 2)
    
     if relative_performance > 0:
         color = "green"
