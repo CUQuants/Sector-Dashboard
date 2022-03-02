@@ -8,6 +8,8 @@ import datetime as dt
 import streamlit as st
 import plotly.express as px
 
+from PIL import Image
+
 st.set_page_config(layout = "wide")
 
 def get_data():
@@ -68,8 +70,6 @@ def daily_port_return(portfolio_return):
         current_portfolio_pct_color = "red"
        
     st.markdown("<h3 style='text-align: center; color: {};'>Daily Portfolio Return: {}%</h3>".format(current_portfolio_pct_color, last_portfolio_return), unsafe_allow_html=True)
-
-st.title("Leeds Investment Trading Group Fund: Energy, Natural Resources, and Sustainability")
 
 def ytd_port(portfolio_return):
 
@@ -287,12 +287,20 @@ def portfolio_value_graph(portfolio_value):
     fig = px.line(portfolio_value_df, x="date", y="portfolio value", title='Portfolio Value', width = 1000)
     st.plotly_chart(fig)
 
+title_col1, title_col2 = st.columns([3,1])
+
+with title_col1:
+    st.title("Leeds Investment Trading Group Fund: Energy, Natural Resources, and Sustainability")
+
+with title_col2:
+    st.image(Image.open("cuquants_logo.png"))
+
 while True:
 
     update_date = dt.datetime.today().strftime("%a %D %I:%M %p")
     st.header("last updated: {}".format(update_date))
     st.write("Sector Head: Joseph Fratino Jr. (MVP)")
-   
+    
     stock_prices, market_prices, benchmark_prices = get_data()
     portfolio_value, portfolio_return = portfolio_df(stock_prices)
    
