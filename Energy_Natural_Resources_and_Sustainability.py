@@ -12,16 +12,17 @@ from PIL import Image
 
 st.set_page_config(layout = "wide")
 
-def get_data():
-
+def get_data():   
+    
     end_date = dt.date.today()
     start_date = dt.date(end_date.year, 1, 1)
-   
+    
     port_tickers = ["EOG", "OKE", "SRE"]
     market_tickers = ["CL=F", "NG=F", "BZ=F"] 
     benchmark_tickers = ["^GSPC", "XLE", "^TNX"]
    
     stock_prices = yf.download(port_tickers, start_date, end_date)['Close']
+    
     market_prices = yf.download(market_tickers, start_date, end_date)['Close']
     benchmark_prices = yf.download(benchmark_tickers, start_date, end_date)['Close']
    
@@ -296,9 +297,7 @@ with title_col2:
     st.image(Image.open("cuquants_logo.png"))
 
 while True:
-
-    update_date = dt.datetime.today().strftime("%a %D %I:%M %p")
-    st.header("last updated: {}".format(update_date))
+    
     st.write("Sector Head: Joseph Fratino Jr. (MVP)")
     
     stock_prices, market_prices, benchmark_prices = get_data()
@@ -370,5 +369,7 @@ while True:
     st.write("Errors may occur due to rounding and outdated information provided, updates do not occur until trading day ends")
     st.write("Dashboard created and maintained by CU Quants, not associated with Leeds Investment Trading Group (LITG) Fund")
     st.write("Investment Decision handled by Leeds Investment Trading Group (LITG) and not CU Quants")
+    
+    st.write("Using prices from this date:", stock_prices.index[len(stock_prices) - 1])
    
     time.sleep(60 * 60 * 4)
