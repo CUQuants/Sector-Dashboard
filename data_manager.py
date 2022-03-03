@@ -72,6 +72,12 @@ def stock_change_port_return(df, transaction_tuple):
         
     return df_output
 
+def get_stock_change_port_value_and_return(df, transaction_tuple):
+    
+    port_return = stock_change_port_return(df, transaction_tuple)
+    port_value = stock_change_port_value(df, transaction_tuple)
+    
+    return port_value, port_return
+
 tuple_fix = ("GOOG", "2022-01-21", "sell")
-port_value_df = stock_change_port_value(df, tuple_fix)   
-port_return_df = stock_change_port_return(df, tuple_fix)
+port_value, port_return = get_stock_change_port_value_and_return(df, tuple_fix)
