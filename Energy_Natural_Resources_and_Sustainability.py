@@ -298,8 +298,6 @@ with title_col2:
 
 while True:
     
-    st.write("Sector Head: Joseph Fratino Jr. (MVP)")
-    
     stock_prices, market_prices, benchmark_prices = get_data()
     portfolio_value, portfolio_return = portfolio_df(stock_prices)
    
