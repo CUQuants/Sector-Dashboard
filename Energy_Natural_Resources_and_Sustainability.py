@@ -12,14 +12,10 @@ from PIL import Image
 
 st.set_page_config(layout = "wide")
 
-def get_data():   
+def get_data(port_tickers, market_tickers, benchmark_tickers):   
     
     end_date = dt.date.today()
     start_date = dt.date(end_date.year, 1, 1)
-    
-    port_tickers = ["EOG", "OKE", "SRE"]
-    market_tickers = ["CL=F", "NG=F", "BZ=F"] 
-    benchmark_tickers = ["^GSPC", "XLE", "^TNX"]
    
     stock_prices = yf.download(port_tickers, start_date, end_date)['Close']
     
@@ -108,9 +104,9 @@ def spx_ytd_return(benchmark_prices):
    
     st.markdown("<h3 style='text-align: center; color: {};'>S&P YTD Return: {}%</h3>".format(color, spx_return_ytd), unsafe_allow_html=True)
 
-def get_benchmark_daily_return(benchmark_prices):
+def get_benchmark_daily_return(benchmark_prices, fund_benchmark):
    
-    benchmark_return = round(benchmark_prices["XLE"].pct_change().dropna()[len(benchmark_prices) - 3] * 100,2)
+    benchmark_return = round(benchmark_prices[fund_benchmark].pct_change().dropna()[len(benchmark_prices) - 3] * 100,2)
    
     if benchmark_return > 0:
         color = "green"
@@ -120,11 +116,11 @@ def get_benchmark_daily_return(benchmark_prices):
         color = "white"
         spx_return = "UNCH"
    
-    st.markdown("<h3 style='text-align: center; color: {};'>XLE Daily Return: {}%</h3>".format(color, benchmark_return), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: {};'>{} Daily Return: {}%</h3>".format(color, fund_benchmark, benchmark_return), unsafe_allow_html=True)
    
-def benchmark_ytd_return(benchmark_prices):
+def benchmark_ytd_return(benchmark_prices, fund_benchmark):
 
-    benchmark_return = round(benchmark_prices["XLE"].pct_change().dropna().cumsum()[len(benchmark_prices) - 2] * 100,2)
+    benchmark_return = round(benchmark_prices[fund_benchmark].pct_change().dropna().cumsum()[len(benchmark_prices) - 2] * 100,2)
    
     if benchmark_return < 0:
         color = "red"
@@ -133,9 +129,9 @@ def benchmark_ytd_return(benchmark_prices):
    
     st.markdown("<h3 style='text-align: center; color: {};'>XLE YTD Return: {}%</h3>".format(color, benchmark_return), unsafe_allow_html=True)
 
-def benchmark_relative_per(benchmark_prices, portfolio_return):
+def benchmark_relative_per(benchmark_prices, portfolio_return, fund_benchmark):
    
-    benchmark_return = round(benchmark_prices["XLE"].pct_change().dropna().cumsum()[len(benchmark_prices) - 2] * 100,2)
+    benchmark_return = round(benchmark_prices[fund_benchmark].pct_change().dropna().cumsum()[len(benchmark_prices) - 2] * 100,2)
     ytd_return = round(portfolio_return[portfolio_return.columns[len(portfolio_return.columns) - 1]].cumsum()[len(portfolio_return) - 1] * 100,2)
    
     relative_performance = round(ytd_return - benchmark_return, 2)
@@ -170,9 +166,9 @@ def spx_tracking_error(benchmark_prices, portfolio_return):
     tracking_error = round(statistics.stdev(diff),2)
     st.markdown("<h3 style='text-align: center; color: grey;'>S&P Tracking Err. (YTD): {}</h3>".format(tracking_error), unsafe_allow_html=True)
    
-def benchmark_tracking_error(benchmark_prices, portfolio_return):
+def benchmark_tracking_error(benchmark_prices, portfolio_return, fund_benchmark):
 
-    market_returns = benchmark_prices["XLE"].pct_change().dropna()
+    market_returns = benchmark_prices[fund_benchmark].pct_change().dropna()
     portfolio_returns = portfolio_return[portfolio_return.columns[len(portfolio_return.columns) - 1]]
     diff = (portfolio_returns - market_returns).dropna()
    
@@ -211,10 +207,10 @@ def sp_correlation(benchmark_prices, portfolio_return):
     corr = round(df.corr()[df.columns[1]][0], 2)
     st.markdown("<h3 style='text-align: center; color: grey;'>S&P Correlation: {}</h3>".format(corr), unsafe_allow_html=True)
    
-def benchmark_correlation(benchmark_prices, portfolio_return):
+def benchmark_correlation(benchmark_prices, portfolio_return, fund_benchmark):
    
     portfolio_return = portfolio_return[portfolio_return.columns[len(portfolio_return.columns) - 1]]
-    market_return = benchmark_prices["XLE"].pct_change().dropna()
+    market_return = benchmark_prices[fund_benchmark].pct_change().dropna()
    
     df = pd.DataFrame({"portfolio": portfolio_return, "market": market_return}).dropna()
     corr = round(df.corr()[df.columns[1]][0], 2)
@@ -265,11 +261,11 @@ def make_pie_chart(portfolio_value):
     fig = px.pie(portfolio_weighting, values = "weights", names = "tickers", title = 'Portfolio Weighting')
     st.plotly_chart(fig)
    
-def portfolio_cum_graph(portfolio_return, market_prices):
+def portfolio_cum_graph(portfolio_return, market_prices, fund_benchmark):
 
     df = market_prices["^GSPC"].pct_change().to_frame()
    
-    df["benchmark"] = market_prices["XLE"].pct_change()
+    df["benchmark"] = market_prices[fund_benchmark].pct_change()
     df["ret"] = portfolio_return[portfolio_return.columns[len(portfolio_return.columns) - 1]]
     df = df.cumsum().dropna().reset_index()
    
@@ -300,8 +296,15 @@ while True:
     
     st.write("Sector Head: Joseph Fratino Jr. (MVP)")
     
-    stock_prices, market_prices, benchmark_prices = get_data()
+    port_tickers = ["EOG", "OKE", "SRE"]
+    market_tickers = ["CL=F", "NG=F", "BZ=F"] 
+    benchmark_tickers = ["^GSPC", "XLE", "^TNX"]
+    fund_benchmark = "XLE"
+    
+    stock_prices, market_prices, benchmark_prices = get_data(port_tickers, market_tickers, benchmark_tickers)
     portfolio_value, portfolio_return = portfolio_df(stock_prices)
+
+    
    
     top_row1, top_row2, top_row3 = st.columns(3)
    
@@ -317,16 +320,16 @@ while True:
         st.markdown("<h2 style='text-align: center; color: grey;'>Market Statistics</h2>", unsafe_allow_html=True)
         get_spx_daily_return(benchmark_prices)
         spx_ytd_return(benchmark_prices)
-        get_benchmark_daily_return(benchmark_prices)
-        benchmark_ytd_return(benchmark_prices)
+        get_benchmark_daily_return(benchmark_prices, fund_benchmark)
+        benchmark_ytd_return(benchmark_prices, fund_benchmark)
      
     with top_row3:
        
         st.markdown("<h2 style='text-align: center; color: grey;'>Relative Statistics</h2>", unsafe_allow_html=True)
         spx_relative_per(benchmark_prices, portfolio_return)
-        benchmark_relative_per(benchmark_prices, portfolio_return)
+        benchmark_relative_per(benchmark_prices, portfolio_return, fund_benchmark)
         spx_tracking_error(benchmark_prices, portfolio_return)
-        benchmark_tracking_error(benchmark_prices, portfolio_return)
+        benchmark_tracking_error(benchmark_prices, portfolio_return, fund_benchmark)
    
     second_row1, second_row2, second_row3 = st.columns(3)
    
@@ -337,7 +340,7 @@ while True:
         st.markdown("<h2 style='text-align: center; color: grey;'></h2>", unsafe_allow_html=True)
         st.markdown("<h2 style='text-align: center; color: grey;'>Market Info</h2>", unsafe_allow_html=True)
         sp_correlation(benchmark_prices, portfolio_return)
-        benchmark_correlation(benchmark_prices, portfolio_return)
+        benchmark_correlation(benchmark_prices, portfolio_return, fund_benchmark)
        
     with second_row2:
        
@@ -356,7 +359,7 @@ while True:
     third_row1, third_row2 = st.columns(2)
    
     with third_row1:
-        portfolio_cum_graph(portfolio_return, benchmark_prices)
+        portfolio_cum_graph(portfolio_return, benchmark_prices, fund_benchmark)
        
     with third_row2:
         portfolio_value_graph(portfolio_value)
