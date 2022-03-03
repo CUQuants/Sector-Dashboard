@@ -294,8 +294,6 @@ with title_col2:
 
 while True:
     
-    st.write("Sector Head: Joseph Fratino Jr. (MVP)")
-    
     port_tickers = ["EOG", "OKE", "SRE"]
     market_tickers = ["CL=F", "NG=F", "BZ=F"] 
     benchmark_tickers = ["^GSPC", "XLE", "^TNX"]
