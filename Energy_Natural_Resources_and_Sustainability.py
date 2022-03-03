@@ -300,10 +300,6 @@ while True:
     fund_benchmark = "XLE"
     
     stock_prices, market_prices, benchmark_prices = get_data(port_tickers, market_tickers, benchmark_tickers)
-    portfolio_value, portfolio_return = portfolio_df(stock_prices)
-
-    
-   
     top_row1, top_row2, top_row3 = st.columns(3)
    
     with top_row1:
