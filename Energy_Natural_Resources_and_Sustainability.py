@@ -43,7 +43,7 @@ def market_df(market_prices):
    
     return market_return
 
-def get_portfolio_value():
+def get_portfolio_value(portfolio_value):
 
     current_portfolio_value = round(portfolio_value[portfolio_value.columns[len(portfolio_value.columns) - 1]][len(portfolio_value) - 1],2)
     previous_portfolio_value = round(portfolio_value[portfolio_value.columns[len(portfolio_value.columns) - 1]][len(portfolio_value) - 2],2)
@@ -300,12 +300,13 @@ while True:
     fund_benchmark = "XLE"
     
     stock_prices, market_prices, benchmark_prices = get_data(port_tickers, market_tickers, benchmark_tickers)
+    portfolio_value, portfolio_return = portfolio_df(stock_prices)
     top_row1, top_row2, top_row3 = st.columns(3)
    
     with top_row1:
    
         st.markdown("<h2 style='text-align: center; color: grey;'>Portfolio Statistics</h2>", unsafe_allow_html=True)
-        get_portfolio_value()
+        get_portfolio_value(portfolio_value)
         daily_port_return(portfolio_return)
         ytd_port(portfolio_return)
        
