@@ -9,31 +9,29 @@ import streamlit as st
 import plotly.express as px
 
 from PIL import Image
+from class_data_manager import *
 
 st.set_page_config(layout = "wide")
 
-def get_data(port_tickers, market_tickers, benchmark_tickers):   
+def get_data(market_tickers, benchmark_tickers):   
     
     end_date = dt.date.today()
     start_date = dt.date(end_date.year, 1, 1)
-   
-    stock_prices = yf.download(port_tickers, start_date, end_date)['Close']
     
     market_prices = yf.download(market_tickers, start_date, end_date)['Close']
     benchmark_prices = yf.download(benchmark_tickers, start_date, end_date)['Close']
    
-    return stock_prices, market_prices, benchmark_prices
+    return market_prices, benchmark_prices
 
-def portfolio_df(stock_prices):
+def portfolio_df(portfolio_value, portfolio_return, num_shares):
+    
+    for i in range(len(num_shares)):
+        portfolio_value[portfolio_value.columns[i]] = portfolio_value[portfolio_value.columns[i]] * float(num_shares[i])
 
-    number_of_shares = [66, 95, 43]
-    portfolio_value = stock_prices.copy()
-   
-    for i in range(len(number_of_shares)):
-        portfolio_value[portfolio_value.columns[i]] = portfolio_value[portfolio_value.columns[i]] * number_of_shares[i]
-       
     portfolio_value["total_value"] = portfolio_value.sum(axis =  1)
-    portfolio_return = portfolio_value.pct_change().dropna()
+    
+    portfolio_return["total_return"] = portfolio_return.sum(axis = 1)
+    portfolio_return = portfolio_return.pct_change().dropna()
    
     return portfolio_value, portfolio_return
 
@@ -54,7 +52,6 @@ def get_portfolio_value(portfolio_value):
         current_portfolio_value_color = "green"
         
     current_portfolio_value = "{:,}".format(current_portfolio_value)
-   
     st.markdown("<h3 style='text-align: center; color: {};'>Portfolio Value: ${}</h3>".format(current_portfolio_value_color, current_portfolio_value), unsafe_allow_html=True)
 
 def daily_port_return(portfolio_return):
@@ -65,7 +62,6 @@ def daily_port_return(portfolio_return):
         current_portfolio_pct_color = "green"
     else:
         current_portfolio_pct_color = "red"
-       
     st.markdown("<h3 style='text-align: center; color: {};'>Daily Portfolio Return: {}%</h3>".format(current_portfolio_pct_color, last_portfolio_return), unsafe_allow_html=True)
 
 def ytd_port(portfolio_return):
@@ -249,7 +245,7 @@ def get_nat_gas(market_prices):
         color = "red"
         
     st.markdown("<h3 style='text-align: center; color: {};'>Natural Gas Price: ${}</h3>".format(color, current_price), unsafe_allow_html=True)
-   
+
 def make_pie_chart(portfolio_value):
    
     portfolio_weighting = portfolio_value.iloc[len(portfolio_value) - 1]
@@ -294,13 +290,18 @@ with title_col2:
 
 while True:
     
-    port_tickers = ["EOG", "OKE", "SRE"]
     market_tickers = ["CL=F", "NG=F", "BZ=F"] 
     benchmark_tickers = ["^GSPC", "XLE", "^TNX"]
     fund_benchmark = "XLE"
     
-    stock_prices, market_prices, benchmark_prices = get_data(port_tickers, market_tickers, benchmark_tickers)
-    portfolio_value, portfolio_return = portfolio_df(stock_prices)
+    data_manager = dataManager("ENERGY")
+
+    df_return = data_manager.df_return
+    df_value = data_manager.df_value
+    share_num = data_manager.transactions["quantity"].to_list()
+    
+    market_prices, benchmark_prices = get_data(market_tickers, benchmark_tickers)
+    portfolio_value, portfolio_return = portfolio_df(df_value, df_return, share_num)
     top_row1, top_row2, top_row3 = st.columns(3)
    
     with top_row1:
@@ -368,6 +369,6 @@ while True:
     st.write("Dashboard created and maintained by CU Quants, not associated with Leeds Investment Trading Group (LITG) Fund")
     st.write("Investment Decision handled by Leeds Investment Trading Group (LITG) and not CU Quants")
     
-    st.write("Using prices from this date:", stock_prices.index[len(stock_prices) - 1])
+    st.write("Using prices from this date:", df_value.index[len(df_value) - 1])
    
     time.sleep(60 * 60 * 4)
