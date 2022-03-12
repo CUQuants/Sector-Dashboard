@@ -6,3 +6,9 @@ https://share.streamlit.io/cuquants/sector-dashboard/main/Energy_Natural_Resourc
 
 Financials
 https://share.streamlit.io/cuquants/sector-dashboard/main/Financials.py
+
+TMT
+https://share.streamlit.io/cuquants/sector-dashboard/main/TMT.py
+
+Consumer
+https://share.streamlit.io/cuquants/sector-dashboard/main/Consumer.py
