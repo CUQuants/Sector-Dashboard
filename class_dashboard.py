@@ -116,7 +116,7 @@ class DashBoard:
         if benchmark_return > 0:
             color = "green"
        
-        st.markdown("<h3 style='text-align: center; color: {};'>XLE YTD Return: {}%</h3>".format(color, benchmark_return), unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; color: {};'>{} YTD Return: {}%</h3>".format(color, fund_benchmark, benchmark_return), unsafe_allow_html=True)
 
     def benchmark_relative_per(self, fund_benchmark):
 
@@ -235,4 +235,3 @@ class DashBoard:
         portfolio_value_df.columns = ["date", "portfolio value"]
         fig = px.line(portfolio_value_df, x="date", y="portfolio value", title='Portfolio Value', width = 1000)
         st.plotly_chart(fig)
-   
