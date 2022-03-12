@@ -37,7 +37,7 @@ def get_treasury(market_prices):
     else:
         color = "red"
 
-    st.markdown("<h3 style='text-align: center; color: {};'>S&10Y {}%</h3>".format(color, current_price), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: {};'>10Y: {}%</h3>".format(color, current_price), unsafe_allow_html=True)
     
 st.set_page_config(layout = "wide")
 
